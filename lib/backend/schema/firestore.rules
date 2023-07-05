@@ -1,0 +1,58 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{document} {
+      allow create: if request.auth.uid == document;
+      allow read: if true;
+      allow write: if request.auth.uid == document;
+      allow delete: if false;
+    }
+
+    match /Restaurants/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /adventure/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /VerifiedOwnersDetails/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if false;
+    }
+
+    match /users/{parent}/Bookings/{document} {
+      allow create: if request.auth.uid == parent;
+      allow read: if request.auth != null;
+      allow write: if request.auth.uid == parent;
+      allow delete: if false;
+    }
+
+    match /{path=**}/Bookings/{document} {
+      allow read: if request.auth != null;
+    }
+
+
+    match /users/{parent}/Reviews/{document} {
+      allow create: if request.auth.uid == parent;
+      allow read: if true;
+      allow write: if request.auth.uid == parent;
+      allow delete: if false;
+    }
+
+    match /MedicalServices/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if false;
+    }
+  }
+}
